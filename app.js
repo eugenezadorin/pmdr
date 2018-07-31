@@ -22,6 +22,7 @@ program
 
 program
 	.command('stat [date]')
+	.alias('stats')
 	.description('Show daily stats')
 	.action(statCmd);
 
