@@ -9,9 +9,15 @@ module.exports = function(date) {
 			stats = extend(stats, extended => {
 				console.log('Pomodoro - today stats');
 				console.log('');
+
 				let i, j, item, line;
+				let countSummary = 0, timeSummary = 0;
+
 				for (i in extended.items) {
 					item = extended.items[i];
+					countSummary += item.count;
+					timeSummary += item.approx_time;
+
 					line = i + ': ';
 					for (j = extended.max_task_name_len - item.key_len + 5; j--; i >= 0) {
 						line += ' ';
@@ -23,6 +29,8 @@ module.exports = function(date) {
 					line += '(' + getPluralHours(item.approx_time) + ')';
 					console.log(line);
 				}
+				console.log('\nSummary: ' + getPluralHours(timeSummary));
+				console.log('\nPlease note that the time is calculated based on your current settings and is approximate');
 			});
 		});
 	}
@@ -65,7 +73,7 @@ function extend(stats, callback) {
 function getApproxTime(minutes, periods) {
 	let hours = (minutes * periods) / 60;
 	if (hours != Math.round(hours)) {
-		hours = hours.toFixed(1);
+		hours = parseFloat(hours.toFixed(1));
 	}
 	return hours;
 }
