@@ -12,6 +12,7 @@ console.log(`
     $ pmdr stat 2018-07-21       # show stats for specified day
     $ pmdr config --list         # show configuration
     $ pmdr config work_time 30   # set work_time parameter to 30 minutes
+    $ pmdr config --reset        # restore current settings to defaults
 `);
 
 };

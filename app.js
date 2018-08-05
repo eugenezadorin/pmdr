@@ -34,6 +34,7 @@ program
 program
 	.command('config [param] [value]')
 	.option('--list', 'Show full options list')
+	.option('--reset', 'Reset to defaults')
 	.action(configCmd);
 
 program.parse(process.argv);

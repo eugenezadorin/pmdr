@@ -1,13 +1,41 @@
+'use strict';
+
 const fs = require('fs');
+const path = require('path');
 
 module.exports = function(param, value, cmd) {
-	const settingsPath = '../settings.json';
+	const settingsPath = path.join(__dirname, '..', 'settings.json');
+	const defaultSettingsPath = path.join(__dirname, '..', 'default_settings.json');
+
 	let currentSettings = require(settingsPath);
+
 	if (cmd.list) {
+		listAction();
+	} else if (cmd.reset) {
+		resetAction();
+	} else {
+		setAction();
+	}
+
+	function listAction() {
 		for (let key in currentSettings) {
 			console.log(`${key}: ${currentSettings[key]}`);
 		}
-	} else {
+	}
+
+	function resetAction() {
+		const defaultSettings = require(defaultSettingsPath);
+		fs.writeFile(settingsPath, JSON.stringify(defaultSettings), 'utf8', err => {
+			if (err) {
+				console.error('Can\'t reset settings');
+				console.error(err);
+			} else {
+				console.log('Settings restored');
+			}
+		});
+	}
+
+	function setAction() {
 		if (!param || !value) {
 			console.error('Parameter and value must be specified');
 			return;
@@ -26,7 +54,7 @@ module.exports = function(param, value, cmd) {
 
 		currentSettings[param] = value;
 
-		fs.writeFile('./settings.json', JSON.stringify(currentSettings), 'utf8', err => {
+		fs.writeFile(settingsPath, JSON.stringify(currentSettings), 'utf8', err => {
 			if (err) {
 				console.error('Can\'t save settings');
 			} else {
