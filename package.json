@@ -1,17 +1,23 @@
 {
   "name": "pmdr",
   "version": "1.0.0",
-  "description": "",
+  "description": "Pomodoro time tracker in your console",
+  "author": "Eugene Zadorin <mail@eugenezadorin.ru>",
+  "license": "MIT",
+  "keywords": [
+    "pomodoro"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eugenezadorin/pmdr.git"
+  },
   "main": "app.js",
   "preferGlobal": true,
   "bin": "app.js",
   "scripts": {
-    "install": "install.js",
+    "install": "node install.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "cli-cursor": "^2.1.0",
     "commander": "^2.16.0",
