@@ -9,7 +9,7 @@ const helpCmd = require('./commands/help.js');
 
 program
 	.name('pmdr')
-	.version('0.0.1')
+	.version(require('./package.json').version)
 	.description('Pomodoro time tracker in your console')
 	.usage('[command]');
 
