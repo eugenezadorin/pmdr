@@ -4,36 +4,51 @@ const StatsManager = require('../lib/Stats.js');
 
 module.exports = function(date) {
 	const manager = new StatsManager();
-	if (!date) {
-		manager.init(manager.todayStatsFile, (stats) => {
-			stats = extend(stats, extended => {
-				console.log('Pomodoro - today stats');
-				console.log('');
+	let statsFile;
 
-				let i, j, item, line;
-				let countSummary = 0, timeSummary = 0;
-
-				for (i in extended.items) {
-					item = extended.items[i];
-					countSummary += item.count;
-					timeSummary += item.approx_time;
-
-					line = i + ': ';
-					for (j = extended.max_task_name_len - item.key_len + 5; j--; i >= 0) {
-						line += ' ';
-					}
-					line += item.count;
-					for (j = extended.max_digits_count - item.digits_count + 1; j--; i >= 0) {
-						line += ' ';
-					}
-					line += '(' + getPluralHours(item.approx_time) + ')';
-					console.log(line);
-				}
-				console.log('\nSummary: ' + getPluralHours(timeSummary));
-				console.log('\nPlease note that the time is calculated based on your current settings and is approximate');
-			});
-		});
+	if (date) {
+		if (manager.validDate(date)) {
+			statsFile = manager.makeStatsFileName(date);
+		} else {
+			console.error('Invalid date. Use format yyyy-mm-dd');
+			process.exit();
+		}
+	} else {
+		statsFile = manager.todayStatsFile;
 	}
+
+	manager.init(statsFile, (stats) => {
+		stats = extend(stats, extended => {
+			if (date) {
+				console.log('Pomodoro - stats for ' + date);
+			} else {
+				console.log('Pomodoro - today stats');
+			}
+			console.log('');
+
+			let i, j, item, line;
+			let countSummary = 0, timeSummary = 0;
+
+			for (i in extended.items) {
+				item = extended.items[i];
+				countSummary += item.count;
+				timeSummary += item.approx_time;
+
+				line = i + ': ';
+				for (j = extended.max_task_name_len - item.key_len + 5; j--; i >= 0) {
+					line += ' ';
+				}
+				line += item.count;
+				for (j = extended.max_digits_count - item.digits_count + 1; j--; i >= 0) {
+					line += ' ';
+				}
+				line += '(' + getPluralHours(item.approx_time) + ')';
+				console.log(line);
+			}
+			console.log('\nSummary: ' + getPluralHours(timeSummary));
+			console.log('\nPlease note that the time is calculated based on your current settings and is approximate');
+		});
+	});
 };
 
 function extend(stats, callback) {
